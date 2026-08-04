@@ -14,5 +14,4 @@ android.skip_apk_rescale = True
 android.private_storage = 1
 
 # Жестко указываем Buildozer использовать готовый системный SDK и лицензии
-android.sdk_path = /usr/local/lib/android/sdk
 android.ndk_path = 
