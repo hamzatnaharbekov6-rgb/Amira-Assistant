@@ -8,18 +8,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
+      - name: Set up System Dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libssl-dev libffi-dev libasound2-dev acl
 
-      - name: Build APK with Buildozer Action
-        uses: ArtemSBulgakov/buildozer-action@v1
-        with:
-          workdir: .
-          buildozer_version: stable
+      - name: Install Stable Buildozer 1.5.0
+        run: |
+          # Ставим легендарную стабильную версию 1.5.0 и Cython
+          pip3 install --user buildozer==1.5.0 cython==0.29.33
 
+      - name: Compile APK with Buildozer
+        run: |
+          export PATH=$PATH:~/.local/bin
+          # Тихо принимаем лицензии и запускаем сборку
+          yes | buildozer -v android debug
+        
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
