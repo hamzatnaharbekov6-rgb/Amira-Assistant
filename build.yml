@@ -1,0 +1,22 @@
+name: Build Amira APK
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Get Buildozer Action
+        uses: ArtemGovorov/buildozer-action@v1
+        with:
+          command: buildozer -v android debug
+          buildozer_version: stable
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: Amira-APK
+          path: bin/*.apk
+
