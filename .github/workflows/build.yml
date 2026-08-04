@@ -11,17 +11,29 @@ jobs:
       - name: Set up System Dependencies
         run: |
           sudo apt update
-          sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libssl-dev libffi-dev libasound2-dev acl
+          sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libssl-dev libffi-dev libasound2-dev acl wget
 
       - name: Install Latest Buildozer and Cython
         run: |
           pip3 install --user --upgrade buildozer cython==0.29.33
 
-      - name: Force Accept Android SDK Licenses
+      - name: Manual SDK and Licenses Setup
         run: |
-          # Создаем папки лицензий для всех возможных версий SDK
+          # Вручную создаем правильную структуру папок для нового sdkmanager
+          mkdir -p ~/.buildozer/android/platform/android-sdk/cmdline-tools/latest || true
           mkdir -p ~/.buildozer/android/platform/android-sdk/licenses || true
-          echo -e "89354db274b0091589d8694c3d4c9153ea0ec681\n24333f1a63b6b82d1e1ad14079412178983e6519\ned1d0a5b78b05389fd4a21308cdcf88668f5321b" > ~/.buildozer/android/platform/android-sdk/licenses/android-sdk-license
+          
+          # Скачиваем официальные инструменты командной строки от Google
+          wget https://google.com -O cmdline.zip
+          unzip -q cmdline.zip
+          mv cmdline-tools/* ~/.buildozer/android/platform/android-sdk/cmdline-tools/latest/ || true
+          
+          # Делаем копию в старую папку, чтобы задобрить старые скрипты Buildozer
+          mkdir -p ~/.buildozer/android/platform/android-sdk/tools/bin || true
+          cp -r ~/.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin/* ~/.buildozer/android/platform/android-sdk/tools/bin/ || true
+          
+          # Записываем лицензии, чтобы Google не выдавал ошибки
+          echo -e "89354db274b0091589d8694c3d4c9153ea0ec681\n24333f1a63b6b82d1e1ad14079412178983e6519" > ~/.buildozer/android/platform/android-sdk/licenses/android-sdk-license
 
       - name: Compile APK with Buildozer
         run: |
