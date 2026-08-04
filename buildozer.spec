@@ -6,8 +6,8 @@ source.dir = .
 source.include_exts = py,png,jpg,kv,atlas
 version = 0.1
 
-# Жестко блокируем версии, чтобы сервер не качал сырой Python 3.14
-requirements = python3==3.11.9, kivy, kivymd, plyer, pyjnius==1.6.0
+# Чистый список без знаков "==", чтобы Buildozer не сходил с ума
+requirements = python3, kivy, kivymd, plyer, pyjnius
 
 orientation = portrait
 fullscreen = 0
@@ -20,3 +20,7 @@ android.private_storage = 1
 android.api = 33
 android.ndk = 25b
 android.build_tools_version = 33.0.0
+
+[buildozer]
+log_level = 2
+warn_on_root = 1
