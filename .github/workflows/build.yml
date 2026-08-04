@@ -19,4 +19,3 @@ jobs:
         with:
           name: Amira-APK
           path: bin/*.apk
-
