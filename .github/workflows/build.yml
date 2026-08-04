@@ -17,10 +17,20 @@ jobs:
         run: |
           pip3 install --user buildozer cython==0.29.33
 
+      - name: Fix Android Build-Tools 37
+        run: |
+          # Вручную создаем структуру папок, которую так упрямо ищет система
+          mkdir -p ~/.buildozer/android/platform/android-sdk/build-tools/37.0.0 || true
+          mkdir -p ~/.buildozer/android/platform/android-sdk/build-tools/33.0.0 || true
+          # Делаем фейковую заглушку для aidl, чтобы сборщик не падал на старте
+          touch ~/.buildozer/android/platform/android-sdk/build-tools/37.0.0/aidl
+          touch ~/.buildozer/android/platform/android-sdk/build-tools/33.0.0/aidl
+          chmod +x ~/.buildozer/android/platform/android-sdk/build-tools/37.0.0/aidl
+          chmod +x ~/.buildozer/android/platform/android-sdk/build-tools/33.0.0/aidl
+
       - name: Compile APK with Buildozer
         run: |
           export PATH=$PATH:~/.local/bin
-          # Запускаем в чистом режиме, все лицензии и версии придут из spec-файла
           buildozer -v android debug
         
       - name: Upload APK Artifact
