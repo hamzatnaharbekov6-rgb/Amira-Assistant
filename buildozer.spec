@@ -13,4 +13,5 @@ android.api = 33
 android.minapi = 24
 android.ndk_api = 21
 android.private_storage = 1
+android.accept_apk_license = True
 
