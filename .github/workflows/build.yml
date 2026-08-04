@@ -17,9 +17,17 @@ jobs:
         run: |
           pip3 install --user --upgrade buildozer
 
+      - name: Auto Accept Android Licenses
+        run: |
+          mkdir -p ~/.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin || true
+          # Принудительно соглашаемся со всеми лицензиями Android SDK
+          yes | (sdkmanager --licenses || true)
+
       - name: Compile APK with Buildozer
         run: |
           export PATH=$PATH:~/.local/bin
+          # Передаем Buildozer флаг автоматического принятия лицензий
+          buildozer android licenses
           buildozer -v android debug
         
       - name: Upload APK Artifact
