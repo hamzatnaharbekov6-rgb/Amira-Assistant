@@ -13,6 +13,13 @@ jobs:
           sudo apt update
           sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libssl-dev libffi-dev libasound2-dev acl
 
+      - name: Free Disk Space and Memory
+        run: |
+          # Очищаем системный мусор Ubuntu, чтобы дать Buildozer максимум памяти
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf "/usr/local/share/boost"
+
       - name: Install Buildozer and Cython
         run: |
           pip3 install --user buildozer cython==0.29.33
@@ -20,6 +27,8 @@ jobs:
       - name: Compile APK with Buildozer
         run: |
           export PATH=$PATH:~/.local/bin
+          # Задаем параметры Gradle, чтобы он не жрал лишнюю память сервера
+          export GRADLE_OPTS="-Dorg.gradle.jvmargs=-Xmx2048m -Dorg.gradle.workers.max=2"
           yes | buildozer -v android debug
         
       - name: Upload APK Artifact
