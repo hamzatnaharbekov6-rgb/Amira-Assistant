@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout code
-        uses: actions/checkout=v4
+        uses: actions/checkout@v4
 
       - name: Set up System Dependencies
         run: |
@@ -20,7 +20,6 @@ jobs:
       - name: Compile APK with Buildozer
         run: |
           export PATH=$PATH:~/.local/bin
-          # Эта команда принудительно заставляет Buildozer автоматически соглашаться на все лицензии Google в тихом режиме
           yes | buildozer -v android debug
         
       - name: Upload APK Artifact
