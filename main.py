@@ -1,3 +1,5 @@
+# __version__ = "1.0"
+# buildozer: requirements = python3==3.11.9,kivy,kivymd,plyer,pyjnius==1.6.0
 import os
 from kivy.app import App
 from kivymd.app import MDApp
