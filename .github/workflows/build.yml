@@ -17,10 +17,16 @@ jobs:
         run: |
           pip3 install --user buildozer==1.5.0 cython==0.29.33
 
+      - name: Force Accept Android SDK 37 License
+        run: |
+          # Создаем системную папку лицензий Android SDK внутри Buildozer до его старта
+          mkdir -p ~/.buildozer/android/platform/android-sdk/licenses || true
+          # Записываем туда официальный хэш-код лицензии Google, который закрывает ошибку 37-й версии
+          echo -e "89354db274b0091589d8694c3d4c9153ea0ec681\n24333f1a63b6b82d1e1ad14079412178983e6519" > ~/.buildozer/android/platform/android-sdk/licenses/android-sdk-license
+
       - name: Compile APK with Buildozer
         run: |
           export PATH=$PATH:~/.local/bin
-          # Запускаем сборку в чистом режиме
           buildozer -v android debug
         
       - name: Upload APK Artifact
