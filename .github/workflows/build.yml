@@ -15,7 +15,7 @@ jobs:
           java-version: '17'
 
       - name: Build APK with Buildozer Action
-        uses: ArtemSBulgakov/buildozer-action@v2
+        uses: ArtemSBulgakov/buildozer-action@v1
         with:
           workdir: .
           buildozer_version: stable
